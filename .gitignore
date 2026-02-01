@@ -11,12 +11,6 @@
 *.gch
 *.pch
 
-# Linker files
-*.ilk
-
-# Debugger Files
-*.pdb
-
 # Compiled Dynamic libraries
 *.so
 *.dylib
@@ -37,5 +31,14 @@
 *.out
 *.app
 
-# debug information files
-*.dwo
+# CMake
+CMakeUserPresets.json
+
+# Dirs
+.cache/
+.vscode/
+bin/
+build/
+
+# Resources
+!rsrc/*.obj
