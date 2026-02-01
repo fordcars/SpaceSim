@@ -128,12 +128,6 @@ void GameplaySys::start() {
         renderable.shadingType = RenderableComp::ShadingType::ForwardShaded;
         SkyboxEntity::instances.emplace_back(std::move(sky));
     }
-
-    auto&& music = ResourceSys::get().getAudioResource("texasradiofish");
-    music->call<ma_sound_set_looping>(true);
-    music->call<ma_sound_set_spatialization_enabled>(false);
-    music->call<ma_sound_start>();
-    music->call<ma_sound_set_volume>(0.15f);
 }
 
 void GameplaySys::update(float deltaTime) {

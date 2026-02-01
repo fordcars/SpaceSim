@@ -1,5 +1,5 @@
 # Space Sim
-A simple spaceflight simulator built using [Vroom](https://github.com/fordcars/Vroom)
+A simple spaceflight simulator built using [Vroom](https://github.com/fordcars/Vroom).
 
 # Requirements
 * C++20-compatible compiler
