@@ -54,7 +54,7 @@ void main()
                                   diffuseIntensity, specularIntensity, shininess);
     
     outColor =
-        albedo * 0.12 + // Ambient
+        albedo * 0.0 + // Ambient (if this is other than 0, may not work with multiple lights)
         albedo * lightDiffuseColor * lighting.x +
         materialSpecularColor * lightSpecularColor * lighting.y;
 }

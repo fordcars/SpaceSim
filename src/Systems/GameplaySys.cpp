@@ -3,8 +3,7 @@
 #include "Constants.hpp"
 #include "Entities/CameraEntity.hpp"
 #include "Entities/LightEntity.hpp"
-#include "Entities/PlayerEntity.hpp"
-#include "Entities/PropEntity.hpp"
+#include "Entities/ShipEntity.hpp"
 #include "Entities/SkyboxEntity.hpp"
 #include "RenderingSys.hpp"
 #include "ResourceSys/ResourceSys.hpp"
@@ -35,84 +34,31 @@ void GameplaySys::start() {
 
     CameraEntity::instances.emplace_back(std::move(camera));
 
-    // Create player
+    // Create ship
     {
-        PlayerEntity player;
-        auto [position, renderable, sound, animation, physics, frictionComp, gravity] = player.getComponents();
+        ShipEntity ship;
+        auto [position, renderable, sound, physics] = ship.getComponents();
         position.coords.x = -5;
         position.coords.y = 3;
         position.coords.z = 10;
         physics.positionOffset = {0, 0.7, 0};
         renderable.objectResource = ResourceSys::get().getObjResource("skelly");
         renderable.shader = ResourceSys::get().getShaderResource("deferred_pbr_skinned");
-        animation.setAnimation(Constants::AnimationName::get<"Happy">());
-        animation.startTime = 0.09; // The walk animation isn't a perfect loop, this helps
 
         sound.audioResource = ResourceSys::get().getAudioResource("step");
         sound.audioResource->call<ma_sound_set_looping>(true);
 
-        PlayerEntity::instances.emplace_back(std::move(player));
-    }
-
-    // Create car
-    {
-        PropEntity prop;
-        auto [position, renderable, frictionComp, physics] = prop.getComponents();
-        position.coords.x = 10;
-        position.coords.y = 0;
-        position.coords.z = 10;
-        renderable.objectResource = ResourceSys::get().getObjResource("low_poly_blendered");
-        renderable.shader = ResourceSys::get().getShaderResource("deferred_pbr");
-        PropEntity::instances.emplace_back(std::move(prop));
-    }
-
-    // Create car2
-    {
-        PropEntity prop;
-        auto [position, renderable, frictionComp, physics] = prop.getComponents();
-        position.coords.x = 17;
-        position.coords.y = 0;
-        position.coords.z = 10;
-        position.rotation.y = 1.6f;
-        renderable.objectResource = ResourceSys::get().getObjResource("low_poly_blendered");
-        renderable.shader = ResourceSys::get().getShaderResource("deferred_pbr");
-        PropEntity::instances.emplace_back(std::move(prop));
-    }
-
-    // Create car3
-    {
-        PropEntity prop;
-        auto [position, renderable, frictionComp, physics] = prop.getComponents();
-        position.coords.x = 30;
-        position.coords.y = 2;
-        position.coords.z = -20;
-        position.scale = glm::vec3(2.0f);
-        position.rotation.y = 1.0f;
-        renderable.objectResource = ResourceSys::get().getObjResource("low_poly_blendered");
-        renderable.shader = ResourceSys::get().getShaderResource("deferred_pbr");
-        PropEntity::instances.emplace_back(std::move(prop));
-    }
-
-    // Create floor
-    {
-        PropEntity prop;
-        auto [position, renderable, frictionComp, physics] = prop.getComponents();
-        position.coords.x = 0;
-        position.coords.y = -1;
-        position.coords.z = 0;
-        position.scale = {100, 1, 100};
-        renderable.objectResource = ResourceSys::get().getObjResource("low_poly_blendered");
-        renderable.shader = ResourceSys::get().getShaderResource("deferred_pbr");
-        PropEntity::instances.emplace_back(std::move(prop));
+        ShipEntity::instances.emplace_back(std::move(ship));
     }
 
     // Create light
+    // TODO: create directional light
     {
         LightEntity mainLight;
         auto [position, light, physics] = mainLight.getComponents();
-        position.coords.x = 10;
-        position.coords.y = 15;
-        position.coords.z = 15;
+        position.coords.x = 100;
+        position.coords.y = 100;
+        position.coords.z = 300;
         light.shader = ResourceSys::get().getShaderResource("light_pbr");
         light.intensity = 8.0f;
         LightEntity::instances.emplace_back(std::move(mainLight));
@@ -123,7 +69,7 @@ void GameplaySys::start() {
         SkyboxEntity sky;
         auto [position, renderable] = sky.getComponents();
         position.scale = {1000, 1000, 1000};
-        renderable.objectResource = ResourceSys::get().getObjResource("skybox");
+        renderable.objectResource = ResourceSys::get().getObjResource("spacebox");
         renderable.shader = ResourceSys::get().getShaderResource("flat");
         renderable.shadingType = RenderableComp::ShadingType::ForwardShaded;
         SkyboxEntity::instances.emplace_back(std::move(sky));
@@ -131,27 +77,10 @@ void GameplaySys::start() {
 }
 
 void GameplaySys::update(float deltaTime) {
-    auto& playerPosition = PlayerEntity::instances[0].get<PositionComp>().coords;
+    auto& shipPosition = ShipEntity::instances[0].get<PositionComp>().coords;
     auto& cameraPosition = CameraEntity::instances[0].get<PositionComp>().coords;
-    CameraEntity::instances[0].get<CameraInfoComp>().direction = glm::vec4(playerPosition, 1);
+    CameraEntity::instances[0].get<CameraInfoComp>().direction = glm::vec4(shipPosition, 1);
 
     // Update skybox
     SkyboxEntity::instances[0].get<PositionComp>().coords = cameraPosition;
-
-    // Random debug stuff
-    PropEntity::instances[1].get<PositionComp>().coords.x = 10 + 2 * sin(static_cast<float>(SDL_GetTicks()) / 1000.0f);
-    PropEntity::instances[2].get<PositionComp>().rotation.x = static_cast<float>(SDL_GetTicks()) / 1000.0f;
-
-    // PropEntity::instances[0].get<PositionComp>().coords.x = playerPosition.x;
-    // PropEntity::instances[0].get<PositionComp>().coords.y = playerPosition.y;
-    // PropEntity::instances[0].get<PositionComp>().coords.z = playerPosition.z;
-
-    // // Multicolor light
-    // float time = static_cast<float>(SDL_GetTicks()) / 1000.0f;
-    // glm::vec3 lightColor;
-    // lightColor.r = (sin(time * 2.0f) + 1.0f) / 2.0f;
-    // lightColor.g = (sin(time * 0.7f) + 1.0f) / 2.0f;
-    // lightColor.b = (sin(time * 1.3f) + 1.0f) / 2.0f;
-    // LightEntity::instances[0].get<LightComp>().diffuse = lightColor;
-    // LightEntity::instances[0].get<LightComp>().specular = lightColor;
 }

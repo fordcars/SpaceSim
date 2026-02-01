@@ -32,7 +32,7 @@ set(SOURCES
 	# Entities
 	Entities/CameraEntity.cpp
 	Entities/LightEntity.cpp
-	Entities/PlayerEntity.cpp
+	Entities/ShipEntity.cpp
 	Entities/PropEntity.cpp
 	Entities/SkyboxEntity.cpp
 )
@@ -82,7 +82,7 @@ set(HEADERS
 	Entities/EntityFilter.hpp
 	Entities/CameraEntity.hpp
 	Entities/LightEntity.hpp
-	Entities/PlayerEntity.hpp
+	Entities/ShipEntity.hpp
 	Entities/PropEntity.hpp
 	Entities/SkyboxEntity.hpp
 
@@ -119,14 +119,14 @@ find_package(Eigen3 REQUIRED)
 find_package(miniaudio REQUIRED)
 
 add_executable(
-	Vroom
+	SpaceSim
 	${SOURCES}
 	${HEADERS}
 	${EXTRA_SOURCES}
 )
 
 target_include_directories(
-	Vroom
+	SpaceSim
 	PRIVATE ${EXTRA_INCLUDES}
 	PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}
 	PRIVATE ${SDL2_INCLUDE_DIRS}
@@ -134,7 +134,7 @@ target_include_directories(
 )
 
 target_link_libraries(
-	Vroom
+	SpaceSim
 	PRIVATE ${SDL2_LIBRARIES}
 	PRIVATE ${glad_LIBRARIES}
 	PRIVATE glm::glm
@@ -145,7 +145,7 @@ target_link_libraries(
 	PRIVATE miniaudio::miniaudio
 )
 
-target_compile_definitions(Vroom
+target_compile_definitions(SpaceSim
     PRIVATE
         # If in debug configuration, define DEBUG
         $<$<CONFIG:Debug>:IS_DEBUG>
@@ -153,7 +153,7 @@ target_compile_definitions(Vroom
 
 # Copy resources after buildin
 add_custom_command(
-    TARGET Vroom POST_BUILD
+    TARGET SpaceSim POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_directory
         ${RESOURCE_SRC_DIR}
         ${RESOURCE_DEST_DIR}

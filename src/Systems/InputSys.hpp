@@ -19,18 +19,14 @@ public:
     void handleEvent(const SDL_Event& event);
 
     enum class InputNeed {
-        Jump,
-        WalkLeft,
-        WalkRight,
-        WalkForward,
-        WalkBackward,
-        Run,
-        Crouch,
+        Up,
+        Down,
+        Left,
+        Right,
 
         // Debug stuff
         ToggleShowFPS,
         ChangeDebugRenderMode,
-        ToggleShowWalkVectors,
         ToggleShowCollisionShapes,
     };
 
@@ -38,10 +34,7 @@ private:
     std::unordered_map<SDL_Keycode, InputNeed> mInputMapping;
     std::unordered_set<SDL_Keycode> mHeldKeys;
 
-    glm::vec3 mWalkInputDirection{}; // Walk input direction for current step
-    bool mRunning = false;
     int mDebugRenderMode = 0;
-    bool mShowDebugWalkVectors = false;
 
     void handleNeed(InputNeed need, bool isKeyDown);
     void handleDownNeed(InputNeed need);
@@ -50,6 +43,5 @@ private:
     void handleHoldNeed(InputNeed need);
 
     void handleMouseInput(const SDL_Event& event);
-    void handleWalking(float deltaTime);
     void cycleDebugRenderMode();
 };

@@ -5,7 +5,6 @@ ObjTexture::ObjTexture(std::string name, ObjImage::Ptr image, GLuint samplerId)
 
 ObjTexture::ObjTexture(ObjTexture&& o) noexcept
     : name(std::move(o.name)), image(std::move(o.image)), samplerId(o.samplerId) {
-
     o.samplerId = 0;
 }
 

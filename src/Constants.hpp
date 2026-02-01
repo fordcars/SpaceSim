@@ -7,13 +7,13 @@
 #include "Utils/StringIndexor.hpp"
 
 namespace Constants {
-constexpr const char* GAME_NAME = "Vroom!";
+constexpr const char* GAME_NAME = "SpaceSim!";
 constexpr const char* RESOURCE_DIR = "rsrc";
 
 constexpr unsigned OPENGL_MAJOR_VERSION = 4;
 constexpr unsigned OPENGL_MINOR_VERSION = 3;
-constexpr unsigned DEFAULT_WINDOW_SIZE_X = 1024;
-constexpr unsigned DEFAULT_WINDOW_SIZE_Y = 800;
+constexpr unsigned DEFAULT_WINDOW_SIZE_X = 1920;
+constexpr unsigned DEFAULT_WINDOW_SIZE_Y = 1080;
 constexpr unsigned NO_VSYNC_MAX_FPS = 120; // Max FPS if VSync is off
 const bool ENABLE_VSYNC = true;
 const bool ENABLE_FXAA = false;

@@ -2,8 +2,8 @@ from conan import ConanFile
 from conan.tools.cmake import cmake_layout
 from conan.tools.files import copy
 
-class Vroom(ConanFile):
-    name = "vroom"
+class SpaceSim(ConanFile):
+    name = "space_sim"
     version = "1.0"
     settings = "os", "compiler", "build_type", "arch"
     generators = "CMakeDeps", "CMakeToolchain"
